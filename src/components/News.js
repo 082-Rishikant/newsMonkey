@@ -267,8 +267,8 @@ export class News extends Component {
   constructor() {
     super();
     this.state = {
-      articles:this.articles,
-      loading:false
+      articles: this.articles,
+      loading: false
     }
   }
   render() {
@@ -276,15 +276,13 @@ export class News extends Component {
       <div className='container my-3'>
         <h2>Top headlines</h2>
         <div className="row">
-          <div className="col-md-4">
-            <NewsItem title={'title'} description={'description'} imageUrl="https://s.yimg.com/os/creatr-uploaded-images/2021-12/8a73df20-592e-11ec-8375-2a72806c444d" />
-          </div>
-          <div className="col-md-4">
-            <NewsItem title={'title'} description={'description'} imageUrl="https://s.yimg.com/os/creatr-uploaded-images/2021-12/8a73df20-592e-11ec-8375-2a72806c444d" />
-          </div>
-          <div className="col-md-4">
-            <NewsItem title={'title'} description={'description'} imageUrl="https://s.yimg.com/os/creatr-uploaded-images/2021-12/8a73df20-592e-11ec-8375-2a72806c444d" />
-          </div>
+          {
+            this.state.articles.map((item, id)=>{
+              return <div key={id} className="col-md-4">
+                <NewsItem title={item["title"]} description={item["description"]} imageUrl={item["urlToImage"]} newsUrl={item.url}/>
+              </div>
+            })
+          }
         </div>
 
       </div>
