@@ -3,12 +3,14 @@ import NewsItem from './NewsItem'
 
 export class News extends Component {
   // #3 Second this Life Cycle Method will be called
-  async componentDidMount(){
-    let url="https://newsapi.org/v2/top-headlines?country=us&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9"
-    let data=await fetch(url);
-    let parsedData=await data.json();
-    // console.log(parsedData);
-    this.setState({articles:parsedData.articles});
+  async componentDidMount() {
+    let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=1&&pageSize=20"
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults
+    });
   }
 
   // #1 First This Constructor will be called
@@ -16,8 +18,41 @@ export class News extends Component {
     super();
     this.state = {
       articles: [],
-      loading: false
+      loading: false,
+      page: 1
     }
+  }
+
+  handlePrevious = async () => {
+    if (this.state.page <= 1) {
+
+    }
+    else {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page - 1}&pageSize=20`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      this.setState({
+        articles: parsedData.articles,
+        page: this.state.page - 1
+      });
+    }
+
+  }
+  handleNext = async () => {
+    if ((this.state.page + 1) > (Math.ceil(this.state.totalResults / 20))) {
+
+    }
+    else {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page + 1}&pageSize=20`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      this.setState({
+        articles: parsedData.articles,
+        page: this.state.page + 1
+      });
+      console.log(this.state.page)
+    }
+
   }
 
   // #2 This render method will be called
@@ -27,14 +62,17 @@ export class News extends Component {
         <h1>NewsMonkey - Top headlines</h1>
         <div className="row my-3">
           {
-            this.state.articles.map((item, id)=>{
+            this.state.articles.map((item, id) => {
               return <div key={id} className="col-md-4">
-                <NewsItem title={item["title"]} description={item["description"]} imageUrl={item["urlToImage"]} newsUrl={item.url}/>
+                <NewsItem title={item["title"]} description={item["description"]} imageUrl={item["urlToImage"]} newsUrl={item.url} />
               </div>
             })
           }
         </div>
-
+        <div className="container my-3 d-flex justify-content-between">
+          <button disabled={this.state.page <= 1} className="btn btn-sm btn-dark" onClick={this.handlePrevious}>&#8249; Previous</button>
+          <button className="btn btn-sm btn-dark" onClick={this.handleNext}>Next &#8250;</button>
+        </div>
       </div>
     )
   }
