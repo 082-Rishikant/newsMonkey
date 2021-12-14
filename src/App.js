@@ -10,7 +10,7 @@ export default class App extends React.Component {
       <>
         <N />
         <div className='container'>
-          <News/>
+          <News pageSize={6}/>
         </div>
       </>
 
