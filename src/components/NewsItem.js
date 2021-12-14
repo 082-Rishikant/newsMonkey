@@ -6,7 +6,7 @@ export class NewsItem extends Component {
     let defaultUrlforImage="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQctJwMVuFHhMpVSB2oaMh_2cofKr7gvGiXAA&usqp=CAU";
     let {title, description, imageUrl, newsUrl}=this.props;
     return (
-      <div className="card my-2" style={{width: "18rem"}}>
+      <div className="card my-2">
         <img src={!imageUrl?defaultUrlforImage:imageUrl} className="card-img-top" alt="..."/>
           <div className="card-body">
             <h5 className="card-title">{title?title.slice(0, 30):""}...</h5>

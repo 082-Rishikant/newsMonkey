@@ -5,7 +5,7 @@ import  Spinner  from './Spinner.js';
 export class News extends Component {
   // #3 Second this Life Cycle Method will be called
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=1&&pageSize=${this.props.pageSize}`
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=1&&pageSize=${this.props.pageSize}`
     this.setState({loading:true});
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -31,7 +31,7 @@ export class News extends Component {
 
     }
     else {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
       this.setState({loading:true});
       let data = await fetch(url);
       let parsedData = await data.json();
@@ -45,7 +45,7 @@ export class News extends Component {
   }
   handleNext = async () => {
     if (!((this.state.page + 1) > (Math.ceil(this.state.totalResults / this.props.pageSize)))) {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
       this.setState({loading:true});
       let data = await fetch(url);
       let parsedData = await data.json();
