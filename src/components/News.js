@@ -3,19 +3,6 @@ import NewsItem from './NewsItem'
 import  Spinner  from './Spinner.js';
 
 export class News extends Component {
-  // #3 Second this Life Cycle Method will be called
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=1&&pageSize=${this.props.pageSize}`
-    this.setState({loading:true});
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-      loading:false
-    });
-  }
-
   // #1 First This Constructor will be called
   constructor() {
     super();
@@ -26,38 +13,35 @@ export class News extends Component {
     }
   }
 
+  async changePages(){
+     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+      this.setState({loading:true});
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      this.setState({
+        articles: parsedData.articles,
+        totalResults:parsedData.totalResults,
+        loading:false
+      });
+  }
+
+  // #3 Second this Life Cycle Method will be called
+  async componentDidMount() {
+    this.changePages();
+  }
+
+
   handlePrevious = async () => {
-    if (this.state.page <= 1) {
-
-    }
-    else {
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
-      this.setState({loading:true});
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({
-        articles: parsedData.articles,
-        page: this.state.page - 1,
-        loading:false
-      });
+      this.setState({page:this.state.page-1});
+      this.changePages();
     }
 
-  }
+  
   handleNext = async () => {
-    if (!((this.state.page + 1) > (Math.ceil(this.state.totalResults / this.props.pageSize)))) {
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cace85dc86c047e88c4d8afd8c2bf5d9&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
-      this.setState({loading:true});
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({
-        articles: parsedData.articles,
-        page: this.state.page + 1,
-        loading:false
-      });
-      console.log(this.state.page)
+      this.setState({page:this.state.page+1});
+      this.changePages();
     }
-
-  }
 
   // #2 This render method will be called
   render() {
