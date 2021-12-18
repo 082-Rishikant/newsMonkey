@@ -16,7 +16,8 @@ export class News extends Component {
     this.state = {
       articles: [],
       page: 1,
-      totalResults:0
+      totalResults:0,
+      loading:false
     }
     document.title = `MonkeyNews - ${this.capitalize(this.props.category)}`;
   }
@@ -25,6 +26,7 @@ export class News extends Component {
   async componentDidMount() {
     this.props.setProgress(10);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.setState({loading:true});
     let data = await fetch(url);
     this.props.setProgress(30);
     let parsedData = await data.json();
@@ -33,6 +35,7 @@ export class News extends Component {
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
     });
+    this.setState({loading:false});
     this.props.setProgress(100);
   }
 
@@ -52,6 +55,7 @@ export class News extends Component {
     return (
       <>
         <h1 className='text-center my-3'>NewsMonkey - Top {this.capitalize(this.props.category)} headlines</h1>
+        {this.state.loading && <Spinner/>}
 
         <InfiniteScroll
           dataLength={this.state.articles.length}
